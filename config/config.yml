@@ -1,0 +1,21 @@
+servers:
+- name: team-1-server
+  tags:
+  - team-1
+  - team-1-sensitive
+  host: "http://team-1:9200"
+
+- name: team-2-server
+  tags:
+  - team-2
+  - team-2-sensitive
+  host: "http://team-2:9200"
+
+- name: admin
+  tags:
+  - admin
+  - logging
+  - networking
+  - team-1
+  - team-2
+  host: "http://admin:9200"
