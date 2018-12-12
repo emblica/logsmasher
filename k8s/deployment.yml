@@ -1,0 +1,56 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: logsmasher
+  namespace: kube-system
+  labels:
+    k8s-app: logging
+    kubernetes.io/cluster-service: "true"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: logsmasher
+    spec:
+      containers:
+      - name: logstash
+        image: docker.io/emblica/logsmasher
+        ports:
+        - containerPort: 8034
+        livenessProbe:
+          tcpSocket:
+            port: 8034
+          initialDelaySeconds: 60
+          periodSeconds: 20
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+
+        resources:
+          limits:
+            cpu:    1.0
+            memory: 500Mi
+          requests:
+            cpu:    0.5
+            memory: 300Mi
+      volumes:
+      - name: config-volume
+        configMap:
+          name: logsmasher-configmap
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: logsmasher
+  namespace: kube-system
+  labels:
+    k8s-app: logging
+spec:
+  selector:
+    app: logsmasher
+  ports:
+  - protocol: TCP
+    port: 8034
+  type: ClusterIP
