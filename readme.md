@@ -35,7 +35,7 @@ Pipeline consists **steps**. Each step is executed after each other and passes t
 
 All used steps must be declared in global variable `steps`
 
-```
+```js
 steps = [
   step_a,
   step_b,
@@ -47,7 +47,7 @@ steps = [
 All steps have signature: `f(message) -> message`
 If step function returns `null` any following step won't be executed and the message will be dropped from the pipeline.
 
-```
+```js
 // takes message as input
 function calico (message) {
   // fetches container_name-field with helper function from the message and compares it
